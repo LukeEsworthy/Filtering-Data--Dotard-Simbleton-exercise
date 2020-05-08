@@ -133,19 +133,23 @@ outEl.innerHTML = "<h1>Active Businesses</h1>";
 // });
 
 // both FILTERs need this to post to DOM, as they solely create an array
-businesses.forEach((business) => {
-  const zipCode = business.addressZipCode;
-  outEl.innerHTML += `
-    <h2>${business.companyName}</h2>
-    <section>
-    ${business.addressFullStreet}
-    </section>
-    <section>
-    ${business.addressCity}, ${business["addressStateCode"]} ${zipCode}
-    </section>
-    `;
-  outEl.innerHTML += "<hr/>";
-});
+// businesses.forEach((business) => {
+//   const zipCode = business.addressZipCode;
+//   outEl.innerHTML += `
+//     <h2>${business.companyName}</h2>
+//     <section>
+//     ${business.purchasingAgent.nameFirst}
+//     ${business.purchasingAgent.nameLast}
+//     </section>
+//     <section>
+//     ${business.addressFullStreet}
+//     </section>
+//     <section>
+//     ${business.addressCity}, ${business["addressStateCode"]} ${zipCode}
+//     </section>
+//     `;
+//   outEl.innerHTML += "<hr/>";
+// });
 
 // using MAP() to pull out just purchasing agents. The following code pulls that info and posts to DOM
 // const agents = businesses.map((business) => {
@@ -160,26 +164,88 @@ businesses.forEach((business) => {
 //   outEl.innerHTML += `<hr/>`;
 // });
 
-// Using FIND() method
-document
-  .querySelector("#companySearch")
-  .addEventListener("keypress", (keyPressEvent) => {
-    if (keyPressEvent.charCode === 13) {
-      const foundBusiness = businesses.find((business) =>
-        business.companyName.includes(keyPressEvent.target.value)
-      );
-      outEl.innerHTML = `
-        <h2>
-        ${foundBusiness.companyName}
-        </h2>
-        <section>
-        ${foundBusiness.addressFullStreet}
-        </section>
-        <section>
-        ${foundBusiness.addressCity}
-        ${foundBusiness.addressStateCode}
-        ${foundBusiness.addressZipCode}
-        </section>
-      `;
-    }
-  });
+// Using FIND() method. Currently searchable by first OR last name. (can search by company name by changing IF statement)
+// document
+//   .querySelector("#companySearch")
+//   .addEventListener("keypress", (keyPressEvent) => {
+//     if (keyPressEvent.charCode === 13) {
+//       const foundBusiness = businesses.find(
+//         (business) =>
+//           business.purchasingAgent.nameFirst.includes(
+//             keyPressEvent.target.value
+//           ) ||
+//           business.purchasingAgent.nameLast.includes(keyPressEvent.target.value)
+//       );
+//       console.log(foundBusiness);
+//       outEl.innerHTML = `
+//         <h2>
+//         ${foundBusiness.companyName}
+//         </h2>
+//         <section>
+//         ${foundBusiness.purchasingAgent.nameFirst}
+//         ${foundBusiness.purchasingAgent.nameLast}
+//         </section>
+//         <section>
+//         ${foundBusiness.addressFullStreet}
+//         </section>
+//         <section>
+//         ${foundBusiness.addressCity},
+//         ${foundBusiness.addressStateCode}
+//         ${foundBusiness.addressZipCode}
+//         </section>
+//       `;
+//     }
+//   });
+
+// Using the REDUCE() method
+businesses.forEach((business) => {
+  /* CALCULATE ORDER SUMMARY */
+  let totalOrders = business.orders.reduce(
+    (currentTotal, nextValue) => (currentTotal += nextValue),
+    0
+  );
+
+  outEl.innerHTML += `
+      <h2>
+          ${business.companyName}
+          (${totalOrders})
+      </h2>
+      <section>
+          ${business.addressFullStreet}
+      </section>
+      <section>
+          ${business.addressCity},
+          ${business.addressStateCode}
+          ${business.addressZipCode}
+      </section>
+  `;
+  outEl.innerHTML += "<hr/>";
+});
+
+// Lightning Exercise 1
+const monthlyRainfall = [23, 13, 27, 20, 20, 31, 33, 26, 19, 12, 14, 12, 10];
+
+const totalRainfall = monthlyRainfall.reduce(
+  (currentTotal, nextValue) => (currentTotal += nextValue),
+  0
+);
+
+console.log(totalRainfall);
+
+// Lightning Exercise 2
+const words = [
+  "The",
+  "quick",
+  "brown",
+  "fox",
+  "jumped",
+  "over",
+  "the",
+  "lazy",
+  "dog",
+];
+
+const sentence = words.reduce(
+  (currentWord, nextWord) => (currentWord += " " + nextWord)
+);
+console.log(sentence);
